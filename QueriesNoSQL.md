@@ -34,7 +34,7 @@ db.Clientes.aggregate([
     $group: {
       _id: "$cuentas.tipo_cuenta",
       tot_sal: {$sum: "$cuentas.saldo"},
-      pro_salaaa: {$avg: "$cuentas.saldo"},
+      pro_sala: {$avg: "$cuentas.saldo"},
       sal_max: {$max: "$cuentas.saldo"},
       sal_min: {$min: "$cuentas.saldo"}
     }
