@@ -8,6 +8,7 @@ A continuación se presentan 5 enunciados de consultas basados en las coleccione
 
 **Consulta MongoDB:**
 ```javascript
+Para la consulta es necesario descomponer las cuentas, para lo anterior usamos $unwind 
 db.Clientes.aggregate([
   {$unwind: "$cuentas"},
   {
@@ -28,15 +29,15 @@ db.Clientes.aggregate([
 
 **Consulta MongoDB:**
 ```javascript
-db.Clientes.aggregate([
-  {$unwind: "$cuentas"},
+db.Transacciones.aggregate([
   {
     $group: {
-      _id: "$cuentas.tipo_cuenta",
-      tot_sal: {$sum: "$cuentas.saldo"},
-      pro_sala: {$avg: "$cuentas.saldo"},
-      sal_max: {$max: "$cuentas.saldo"},
-      sal_min: {$min: "$cuentas.saldo"}
+      _id: {
+        id_cli: "$cliente_ref",
+        tip_tra: "$tipo_transaccion"
+      },
+      can_tra: { $sum: 1 },
+      val_tra: { $sum: "$monto" }
     }
   }
 ])
@@ -48,6 +49,7 @@ db.Clientes.aggregate([
 
 **Consulta MongoDB:**
 ```javascript
+Para la consulta es necesario descomponer las cuentas y las tarjetas, para lo anterior usamos $unwind 
 db.Clientes.aggregate([
   {$unwind: "$cuentas"},
   {$unwind: "$cuentas.tarjetas"},
@@ -71,6 +73,7 @@ db.Clientes.aggregate([
 
 **Consulta MongoDB:**
 ```javascript
+Para agrupar por mes es necesario convertir la fecha a tipo DATE y desencadenar la fecha para obtener el mes
 db.Transacciones.aggregate([
   {$match: {tipo_transaccion: "deposito"}},
   {
@@ -97,6 +100,7 @@ db.Transacciones.aggregate([
 
 **Consulta MongoDB:**
 ```javascript
+Para agrupar por dia es necesario convertir la fecha a tipo DATE y desencadenar la fecha para obtener el dia
 db.Transacciones.aggregate([
   {
     $match: {tipo_transaccion: "retiro"}
